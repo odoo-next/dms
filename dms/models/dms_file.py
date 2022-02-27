@@ -141,13 +141,10 @@ class File(models.Model):
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
 
-    embed_code = fields.Html(string="Embed Code", compute='_compute_url' )
+    embed_code = fields.Html(string="Embed Code", compute='_compute_access_url' )
 
 
-    def _compute_url(self):
-        for record in self:
-            record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            record.access_url, 315, 420)
+
 
 
 
@@ -166,6 +163,8 @@ class File(models.Model):
         super()._compute_access_url()
         for item in self:
             item.access_url = "/my/dms/file/%s/download" % (item.id)
+            item.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
+                item.access_url, 315, 420)
 
     def check_access_token(self, access_token=False):
         res = False
