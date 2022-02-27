@@ -39,7 +39,7 @@ odoo.define("mail_preview_base.preview", function (require) {
             return false;
         },
         _getContentUrl: function (attachment) {
-            return  'https://docs.google.com/viewer?url='+(
+            return (
                 "/web/content/" +
                 attachment.id +
                 "?filename=" +
@@ -81,13 +81,13 @@ odoo.define("mail_preview_base.preview", function (require) {
         _getContentUrl: function (attachment) {
             return (
                 "/web/content/" +
-                this.fieldModelName +
-                "/" +
+               // this.fieldModelName +
+                //"/" +
                 attachment.id +
-                "/" +
-                this.fieldName +
-                "?filename=" +
-                window.encodeURIComponent(attachment.name)
+                //"/" +
+             //   this.fieldName +
+             //   "?filename=" +
+             //   window.encodeURIComponent(attachment.name)
             );
         },
         _getImageUrl: function (attachment) {
