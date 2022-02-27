@@ -140,6 +140,16 @@ class File(models.Model):
     # Extend inherited field(s)
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
+
+    embed_code = fields.HTML(string="Embed Code", required=False, )
+
+    def _compute_url(self):
+        for record in self:
+            record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
+            record.content.sudo().local_url, 315, 420)
+
+
+
     @api.depends("mimetype", "content")
     def _compute_image_1920(self):
         """Provide thumbnail automatically if possible."""

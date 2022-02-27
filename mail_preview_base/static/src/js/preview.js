@@ -81,13 +81,13 @@ odoo.define("mail_preview_base.preview", function (require) {
         _getContentUrl: function (attachment) {
             return (
                 "/web/content/" +
-               // this.fieldModelName +
-                //"/" +
-                attachment.id
-                //"/" +
-             //   this.fieldName +
-             //   "?filename=" +
-             //   window.encodeURIComponent(attachment.name)
+                this.fieldModelName +
+                "/" +
+                attachment.id +
+                "/" +
+                this.fieldName +
+                "?filename=" +
+                window.encodeURIComponent(attachment.name)
             );
         },
         _getImageUrl: function (attachment) {
