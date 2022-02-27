@@ -141,7 +141,7 @@ class File(models.Model):
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
 
-    embed_code = fields.HTML(string="Embed Code", required=False, )
+    embed_code = fields.Html(string="Embed Code", required=False, )
 
     def _compute_url(self):
         for record in self:
