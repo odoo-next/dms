@@ -20,7 +20,7 @@
         "security/security.xml",
         "security/ir.model.access.csv",
         "actions/file.xml",
-        "template/assets.xml",
+       # "template/assets.xml",
         "template/onboarding.xml",
         "views/menu.xml",
         "views/tag.xml",
