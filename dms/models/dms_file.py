@@ -143,7 +143,7 @@ class File(models.Model):
 
     embed_code = fields.Html(string="Embed Code", compute='_compute_url' )
 
-    @api.depends('name')
+    @api.depends('tag_ids')
     def _compute_url(self):
         for record in self:
             record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
