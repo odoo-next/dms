@@ -12,7 +12,7 @@
    # "data": ["views/templates.xml"],
     "assets": {
         "web.assets_backend": [
-            "web_drop_target/static/lib/base64js.min.js",
+            "web_drop_target/static/libs/base64js.min.js",
             "web_drop_target/static/src/js/web_drop_target.js",
             "web_drop_target/static/src/scss/web_drop_target.scss",
         ],
