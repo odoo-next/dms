@@ -147,7 +147,7 @@ class File(models.Model):
     def _compute_url(self):
         for record in self:
             record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            record.content.local_url, 315, 420)
+            record.access_url, 315, 420)
 
 
 
