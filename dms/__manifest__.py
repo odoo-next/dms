@@ -32,7 +32,7 @@
         "views/res_config_settings.xml",
         "views/dms_portal_templates.xml",
     ],
-    "qweb": ["static/src/xml/views.xml"],
+
     "demo": [
         "demo/res_users.xml",
         "demo/access_group.xml",
@@ -41,8 +41,24 @@
         "demo/storage.xml",
         "demo/directory.xml",
         "demo/file.xml",
-        "demo/assets.xml",
+        #"demo/assets.xml",
     ],
     "images": ["static/description/banner.png"],
     "application": True,
+
+    "assets": {
+        "web.assets_backend": [
+            "dms/static/src/js/views/many_drop_target.js",
+            "dms/static/src/js/views/file_list_controller.js",
+            "dms/static/src/js/views/file_list_view.js",
+            "dms/static/src/js/views/file_kanban_controller.js",
+            "dms/static/src/js/views/file_kanban_renderer.js",
+            "dms/static/src/js/views/file_kanban_view.js",
+            "dms/static/src/scss/variables.scss",
+            "dms/static/src/scss/file_kanban.scss",
+            "dms/static/src/scss/directory_kanban.scss",
+
+        ],
+        "web.assets_qweb": ["dms/static/src/xml/views.xml"],
+    },
 }
