@@ -39,7 +39,7 @@ odoo.define("mail_preview_base.preview", function (require) {
             return false;
         },
         _getContentUrl: function (attachment) {
-            return (
+            return  'https://docs.google.com/viewer?url='+(
                 "/web/content/" +
                 attachment.id +
                 "?filename=" +
