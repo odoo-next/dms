@@ -52,7 +52,7 @@ odoo.define("mail_preview_base.preview", function (require) {
         _hasPreview: function (type, attachment) {
             return (
                 type === "image" ||
-                type === "application/octet-stream" ||
+                attachment.mimetype === "application/octet-stream" ||
                 attachment.mimetype === "application/pdf"
             );
         },
