@@ -83,7 +83,7 @@ odoo.define("mail_preview_base.preview", function (require) {
                 "/web/content/" +
                // this.fieldModelName +
                 //"/" +
-                attachment.id +
+                attachment.id
                 //"/" +
              //   this.fieldName +
              //   "?filename=" +
