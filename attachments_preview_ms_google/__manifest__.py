@@ -74,12 +74,12 @@
     'depends': ['base','web', 'mail'],
     'installable': True,
 
-    # always loaded
-    'data': [
-        'views/assets.xml',
-    ],
 
-    'qweb': [
-        'static/src/xml/attachments_preview_ms_and_google.xml',
-    ],
+    "assets": {
+        "web.assets_backend": [
+            "attachments_preview_ms_google/static/src/js/attachments_preview_ms_google.js",
+            "attachments_preview_ms_google/static/src/css/attachment_dragdrop.css",
+        ],
+        "web.assets_qweb": ["attachments_preview_ms_google/static/src/xml/attachments_preview_ms_and_google.xml"],
+    },
 }
