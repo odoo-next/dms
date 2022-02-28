@@ -141,7 +141,7 @@ class File(models.Model):
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
 
-    embed_code = fields.Html(string="Embed Code", compute='_compute_url' )
+    embed_code = fields.Text(string="Embed Code", compute='_compute_url' )
 
     @api.depends('tag_ids')
     def _compute_url(self):
@@ -157,7 +157,7 @@ class File(models.Model):
                                 </head>
                                 <body>"""
             embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            access_url, 315, 420)+"</body>"
+            access_url, 315, 420)+"</body> </html>"
             _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
             record.embed_code=embed_code
 
