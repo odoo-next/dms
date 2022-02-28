@@ -147,8 +147,15 @@ class File(models.Model):
     def _compute_url(self):
         for record in self:
             access_url = "/my/dms/file/%s/download" % (record.id)
-            record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            access_url, 315, 420)
+            html = """
+                            <!DOCTYPE html>
+                            <html>
+                                <head>
+                                    <title>HTML Tables</title>
+                                </head>
+                                <body>"""
+            record.embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
+            access_url, 315, 420)+"</body>"
 
 
 
