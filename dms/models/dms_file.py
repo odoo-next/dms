@@ -146,8 +146,9 @@ class File(models.Model):
     @api.depends('tag_ids')
     def _compute_url(self):
         for record in self:
+            access_url = "/my/dms/file/%s/download" % (record.id)
             record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            record.access_url, 315, 420)
+            access_url, 315, 420)
 
 
 
