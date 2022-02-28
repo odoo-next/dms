@@ -146,7 +146,9 @@ class File(models.Model):
     @api.depends('tag_ids')
     def _compute_url(self):
         for record in self:
+
             access_url = "/my/dms/file/%s/download" % (record.id)
+            _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
             html = """
                             <!DOCTYPE html>
                             <html>
