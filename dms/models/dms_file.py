@@ -158,6 +158,7 @@ class File(models.Model):
                                 <body>"""
             record.embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
             access_url, 315, 420)+"</body>"
+            _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', record.embed_code)
 
 
 
