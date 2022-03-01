@@ -149,7 +149,7 @@ class Storage(models.Model):
 
     @api.model
     def create(self, values):
-        record =super(Storage).create(values)
+        record =super(Storage, self).create(values)
         if record.save_type=='disk':
             directory = record.name
             parent_dir = record.path
