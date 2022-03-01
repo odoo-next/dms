@@ -652,7 +652,7 @@ class DmsDirectory(models.Model):
                 parent_dir = record.complete_name
                 path = os.path.join(parent_dir, directory)
                 try:
-                    os.mkdir(path)
+                    os.mkdirs(path)
                 except Exception as e:
                     raise UserError(_("No se pudo crear el Directorio: %s .", e))
         return res

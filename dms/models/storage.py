@@ -155,7 +155,7 @@ class Storage(models.Model):
             parent_dir = record.path
             path = os.path.join(parent_dir, directory)
             try:
-                os.mkdir(path)
+                os.mkdirs(path)
             except Exception as e:
                 raise ValidationError(_("No se pudo crear el Storage: %s .", e))
         return record
