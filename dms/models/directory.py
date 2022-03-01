@@ -648,7 +648,10 @@ class DmsDirectory(models.Model):
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
         for record in res:
             if record.storage_id.save_type=='disk':
+
                 directory = record.storage_id.name
+                storage_dir = record.storage_id.path
+                path = os.path.join(storage_dir, directory)
                 parent_dir = record.complete_name
                 path = os.path.join(parent_dir, directory)
                 try:
