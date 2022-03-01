@@ -655,13 +655,13 @@ class DmsDirectory(models.Model):
                 directory = record.storage_id.name
                 storage_dir = record.storage_id.path
                 path = os.path.join(storage_dir, directory)
-                parent_dir = record.complete_name
-                path = os.path.join(parent_dir, directory)
+                dir = record.complete_name
+                path = os.path.join(path,dir)
                 try:
                     os.makedirs(path)
                     _logger.error("Creando Directorio")
                 except Exception as e:
-                    raise UserError(_("No se pudo crear el Directorio: %s .", e))
+                    raise UserError(_("No se pudo crear el Directorio: %s ."+path, e))
         return res
 
     def write(self, vals):
