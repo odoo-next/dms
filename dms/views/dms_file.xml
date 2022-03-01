@@ -392,6 +392,8 @@
                         <group>
                             <field name="extension" />
                             <field name="mimetype" />
+                            <field name="path_file_disk" />
+
                         </group>
                     </group>
                     <group name="settings">

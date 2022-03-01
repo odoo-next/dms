@@ -16,7 +16,7 @@ from odoo.tools import consteq, human_size
 from odoo.tools.mimetypes import guess_mimetype
 
 from ..tools import file
-
+import  os
 _logger = logging.getLogger(__name__)
 
 
@@ -141,10 +141,11 @@ class File(models.Model):
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
 
-    embed_code = fields.Text(string="Embed Code", compute='_compute_url' )
+    embed_code = fields.Text(string="Embed Code", compute='_compute_file_data' )
+    path_file_disk = fields.Char(string="Full Path Disk", compute='_compute_file_data' )
 
     @api.depends('tag_ids')
-    def _compute_url(self):
+    def _compute_file_data(self):
         for record in self:
 
             access_url = "/my/dms/file/%s/download" % (record.id)
@@ -160,6 +161,7 @@ class File(models.Model):
             access_url, 315, 420)+"</body> </html>"
             _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
             record.embed_code=embed_code
+            record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
 
 
 
