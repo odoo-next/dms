@@ -642,7 +642,7 @@ class DmsDirectory(models.Model):
                 parent = self.browse([vals["parent_id"]])
                 data = next(iter(parent.sudo().read(["storage_id"])), {})
                 vals["storage_id"] = self._convert_to_write(data).get("storage_id")
-                if vals['save_type']=='disk':
+
         # Hack to prevent error related to mail_message parent not exists in some cases
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})
