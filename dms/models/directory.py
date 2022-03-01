@@ -647,13 +647,14 @@ class DmsDirectory(models.Model):
         ctx.update({"default_parent_id": False})
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
         for record in res:
-            directory = record.storage_id.name
-            parent_dir = record.complete_name
-            path = os.path.join(parent_dir, directory)
-            try:
-                os.mkdir(path)
-            except Exception as e:
-                raise UserError(_("No se pudo crear el Directorio: %s .", e))
+            if record.storage_id.save_type=='disk':
+                directory = record.storage_id.name
+                parent_dir = record.complete_name
+                path = os.path.join(parent_dir, directory)
+                try:
+                    os.mkdir(path)
+                except Exception as e:
+                    raise UserError(_("No se pudo crear el Directorio: %s .", e))
         return res
 
     def write(self, vals):

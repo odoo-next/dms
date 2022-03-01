@@ -148,11 +148,12 @@ class Storage(models.Model):
     @api.model
     def create(self, values):
         record =super(Storage).create(values)
-        directory = record.name
-        parent_dir = record.path
-        path = os.path.join(parent_dir, directory)
-        try:
-            os.mkdir(path)
-        except Exception as e:
-            raise UserError(_("No se pudo crear el Storage: %s .", e))
-        return record
+        if record.save_type=='disk':
+            directory = record.name
+            parent_dir = record.path
+            path = os.path.join(parent_dir, directory)
+            try:
+                os.mkdir(path)
+            except Exception as e:
+                raise UserError(_("No se pudo crear el Storage: %s .", e))
+            return record
