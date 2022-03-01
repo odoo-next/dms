@@ -9,6 +9,8 @@ from odoo import _, api, fields, models
 from odoo.exceptions import AccessError
 
 _logger = logging.getLogger(__name__)
+import os
+from odoo.exceptions import ValidationError, UserError
 
 
 class Storage(models.Model):
@@ -27,6 +29,7 @@ class Storage(models.Model):
             ("database", _("Database")),
             ("file", _("Filestore")),
             ("attachment", _("Attachment")),
+            ("disk ", _("Hard Disk "))
         ],
         string="Save Type",
         default="database",
@@ -99,6 +102,7 @@ class Storage(models.Model):
         help="Indicate if directories and files auto-create in mail "
         "composition process too",
     )
+    path = fields.Char(string="Path", required=False, )
 
     @api.onchange("save_type")
     def _onchange_save_type(self):
@@ -141,3 +145,14 @@ class Storage(models.Model):
     def _compute_count_storage_files(self):
         for record in self:
             record.count_storage_files = len(record.storage_file_ids)
+    @api.model
+    def create(self, values):
+        record =super(Storage).create(values)
+        directory = record.name
+        parent_dir = record.path
+        path = os.path.join(parent_dir, directory)
+        try:
+            os.mkdir(path)
+        except Exception as e:
+            raise UserError(_("No se pudo crear el Storage: %s .", e))
+        return record

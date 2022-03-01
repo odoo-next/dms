@@ -162,6 +162,7 @@
                             <field name="save_type" />
                         </group>
                         <group name="save_storage_right">
+                            <field name="path" />
                         </group>
                     </group>
                     <group name="data_storage">

@@ -14,7 +14,7 @@ from odoo.osv.expression import OR
 from odoo.tools import consteq
 
 from odoo.addons.http_routing.models.ir_http import slugify
-
+import os
 from ..tools.file import check_name, unique_name
 
 _logger = logging.getLogger(__name__)
@@ -646,6 +646,14 @@ class DmsDirectory(models.Model):
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
+        for record in res:
+            directory = record.storage_id.name
+            parent_dir = record.complete_name
+            path = os.path.join(parent_dir, directory)
+            try:
+                os.mkdir(path)
+            except Exception as e:
+                raise UserError(_("No se pudo crear el Directorio: %s .", e))
         return res
 
     def write(self, vals):
