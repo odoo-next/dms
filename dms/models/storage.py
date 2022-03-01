@@ -150,12 +150,15 @@ class Storage(models.Model):
     @api.model
     def create(self, values):
         record =super(Storage, self).create(values)
-        if record.save_type=='disk':
+        _logger.error("%s", str(record))
+        if values['save_type']=='disk':
+            _logger.error("se guarda en disco")
             directory = record.name
             parent_dir = record.path
             path = os.path.join(parent_dir, directory)
             try:
                 os.mkdirs(path)
+                _logger.error("Creando Directorio Storage: "+str(path))
             except Exception as e:
                 raise ValidationError(_("No se pudo crear el Storage: %s .", e))
         return record

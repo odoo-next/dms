@@ -642,12 +642,15 @@ class DmsDirectory(models.Model):
                 parent = self.browse([vals["parent_id"]])
                 data = next(iter(parent.sudo().read(["storage_id"])), {})
                 vals["storage_id"] = self._convert_to_write(data).get("storage_id")
+                if vals['save_type']=='disk':
         # Hack to prevent error related to mail_message parent not exists in some cases
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
+        _logger.error("%s", str(res))
         for record in res:
             if record.storage_id.save_type=='disk':
+                _logger.error("se guarda en disco")
 
                 directory = record.storage_id.name
                 storage_dir = record.storage_id.path
@@ -656,6 +659,7 @@ class DmsDirectory(models.Model):
                 path = os.path.join(parent_dir, directory)
                 try:
                     os.mkdirs(path)
+                    _logger.error("Creando Directorio")
                 except Exception as e:
                     raise UserError(_("No se pudo crear el Directorio: %s .", e))
         return res
