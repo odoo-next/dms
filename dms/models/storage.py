@@ -29,7 +29,7 @@ class Storage(models.Model):
             ("database", _("Database")),
             ("file", _("Filestore")),
             ("attachment", _("Attachment")),
-            ("disk ", _("Hard Disk "))
+            ("disk", _("Hard Disk "))
         ],
         string="Save Type",
         default="database",
