@@ -145,6 +145,8 @@ class Storage(models.Model):
     def _compute_count_storage_files(self):
         for record in self:
             record.count_storage_files = len(record.storage_file_ids)
+
+
     @api.model
     def create(self, values):
         record =super(Storage).create(values)
@@ -156,4 +158,4 @@ class Storage(models.Model):
                 os.mkdir(path)
             except Exception as e:
                 raise UserError(_("No se pudo crear el Storage: %s .", e))
-            return record
+        return record
