@@ -150,7 +150,7 @@ class Storage(models.Model):
     @api.model
     def create(self, values):
         record =super(Storage, self).create(values)
-        _logger.error("%s", str(record))
+        _logger.error("%s", values['save_type'])
         if values['save_type']=='disk':
             _logger.error("se guarda en disco")
             directory = record.name
