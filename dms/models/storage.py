@@ -157,5 +157,5 @@ class Storage(models.Model):
             try:
                 os.mkdir(path)
             except Exception as e:
-                raise UserError(_("No se pudo crear el Storage: %s .", e))
+                raise ValidationError(_("No se pudo crear el Storage: %s .", e))
         return record
