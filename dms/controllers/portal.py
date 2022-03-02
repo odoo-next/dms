@@ -175,16 +175,12 @@ class CustomerPortal(CustomerPortal):
         auth="public",
         website=True,
     )
-    def portal_my_dms_file_download(self, dms_file_id, access_token=None, **kw):
+    def portal_my_dms_file_download(self, dms_file_id, **kw):
         """Process user's consent acceptance or rejection."""
         ensure_db()
         # operations
-        res = self._dms_check_access("dms.file", dms_file_id, access_token)
-        if not res:
-            if access_token:
-                return request.redirect("/")
-            else:
-                return request.redirect("/my")
+        res = request.env["dms.file"].sudo().browse(dms_file_id)
+
 
         dms_file_sudo = res
         # It's necessary to prevent AccessError in ir_attachment .check() function
