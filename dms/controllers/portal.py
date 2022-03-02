@@ -175,11 +175,11 @@ class CustomerPortal(CustomerPortal):
         auth="public",
         website=True,
     )
-    def portal_my_dms_file_download(self, dms_file_id, **kw):
+    def portal_my_dms_file_download(self, name, **kw):
         """Process user's consent acceptance or rejection."""
         ensure_db()
         # operations
-        res = request.env["dms.file"].sudo().browse(dms_file_id)
+        res = request.env["dms.file"].sudo().search([('name','=',name)], limit = 1)
 
 
         dms_file_sudo = res
