@@ -147,8 +147,8 @@ class File(models.Model):
     @api.depends('tag_ids')
     def _compute_file_data(self):
         for record in self:
-
-            access_url = "/my/dms/file/download/%s" % (record.name)
+            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+            access_url = base_url +"/my/dms/file/download/%s" % (record.name)
             _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
             html = """
                             <!DOCTYPE html>
