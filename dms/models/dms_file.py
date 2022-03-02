@@ -148,7 +148,7 @@ class File(models.Model):
     def _compute_file_data(self):
         for record in self:
 
-            access_url = "/my/dms/file/%s/download" % (record.name)
+            access_url = "/my/dms/file/download/%s" % (record.name)
             _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
             html = """
                             <!DOCTYPE html>
@@ -179,7 +179,7 @@ class File(models.Model):
     def _compute_access_url(self):
         super()._compute_access_url()
         for item in self:
-            item.access_url = "/my/dms/file/%s/download" % (item.name)
+            item.access_url = "/my/dms/file/download/%s" % (item.name)
 
     def check_access_token(self, access_token=False):
         res = False

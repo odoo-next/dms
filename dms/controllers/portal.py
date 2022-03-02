@@ -170,7 +170,7 @@ class CustomerPortal(CustomerPortal):
         return request.render("dms.portal_my_dms", values)
 
     @http.route(
-        ["/my/dms/file/<int:dms_file_id>/download"],
+        ["/my/dms/file/download/<string:name>"],
         type="http",
         auth="public",
         website=True,
