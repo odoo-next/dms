@@ -24,7 +24,7 @@ class SlideInherit(models.Model):
         string='Various Doc Formats',
         required=False, default=False)
 
-
+    datas = fields.Binary('Content', attachment=True)
 
     @api.onchange('datas')
     def _on_change_datas(self):
