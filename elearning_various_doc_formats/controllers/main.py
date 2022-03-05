@@ -25,11 +25,11 @@ class ContentController(http.Controller):
 
         dms_file_sudo = res
         # It's necessary to prevent AccessError in ir_attachment .check() function
-        if dms_file_sudo.attachment_id and request.env.user.has_group(
+        if dms_file_sudo.datas and request.env.user.has_group(
                 "base.group_portal"
         ):
             dms_file_sudo = dms_file_sudo.sudo()
-        filecontent = base64.b64decode(dms_file_sudo.content)
+        filecontent = base64.b64decode(dms_file_sudo.datas)
         content_type = ["Content-Type", "application/octet-stream"]
         disposition_content = [
             "Content-Disposition",
