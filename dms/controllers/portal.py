@@ -179,7 +179,7 @@ class CustomerPortal(CustomerPortal):
         """Process user's consent acceptance or rejection."""
         ensure_db()
         # operations
-        res = request.env["dms.file"].search([('name', '=', name)])
+        res = request.env["dms.file"].sudo().search([('name','=',name)], limit = 1)
 
 
         dms_file_sudo = res
