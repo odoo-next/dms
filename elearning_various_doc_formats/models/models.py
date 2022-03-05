@@ -25,6 +25,7 @@ class SlideInherit(models.Model):
         required=False, default=False)
 
     datas = fields.Binary('Content', attachment=True)
+    filename = fields.Char("Image Filename")
 
     @api.onchange('datas')
     def _on_change_datas(self):
@@ -54,7 +55,7 @@ class SlideInherit(models.Model):
                     record.embed_code = '<iframe src="%s" class="o_wslides_iframe_viewer" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (slide_url, 315, 420)
                 else:
                     base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                    access_url = base_url +"/my/elearning/file/download/%s/%s" % (record.id,record.name)
+                    access_url = base_url +"/my/elearning/file/download/%s/%s" % (record.id,record.file_name)
                     record.embed_code = '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" class="o_wslides_iframe_viewer" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
                         access_url, 315, 420)
 

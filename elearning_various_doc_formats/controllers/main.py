@@ -20,7 +20,7 @@ class ContentController(http.Controller):
         """Process user's consent acceptance or rejection."""
         ensure_db()
         # operations
-        res = request.env["slide.slide"].sudo().search([('id','=',int(id)),('name','=',name)], limit = 1)
+        res = request.env["slide.slide"].sudo().search([('id','=',int(id))])
 
 
         dms_file_sudo = res
@@ -33,6 +33,6 @@ class ContentController(http.Controller):
         content_type = ["Content-Type", "application/octet-stream"]
         disposition_content = [
             "Content-Disposition",
-            content_disposition(dms_file_sudo.name),
+            content_disposition(dms_file_sudo.file_name),
         ]
         return request.make_response(filecontent, [content_type, disposition_content])
