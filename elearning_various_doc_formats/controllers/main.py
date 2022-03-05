@@ -20,7 +20,7 @@ class ContentController(http.Controller):
         """Process user's consent acceptance or rejection."""
         ensure_db()
         # operations
-        res = request.env["dms.file"].sudo().search([('id','=',int(id)),('name','=',name)], limit = 1)
+        res = request.env["slide.slide"].sudo().search([('id','=',int(id)),('name','=',name)], limit = 1)
 
 
         dms_file_sudo = res
