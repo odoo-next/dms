@@ -649,19 +649,20 @@ class DmsDirectory(models.Model):
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
         _logger.error("%s", str(res))
         for record in res:
-            if record.storage_id.save_type=='disk':
-                _logger.error("se guarda en disco")
+            if record.storage_id:
+                if record.storage_id.save_type=='disk':
+                    _logger.error("se guarda en disco")
 
-                directory = record.storage_id.name
-                storage_dir = record.storage_id.path
-                path = os.path.join(storage_dir, directory)
-                dir = record.complete_name
-                path = os.path.join(path,dir)
-                try:
-                    os.makedirs(path)
-                    _logger.error("Creando Directorio")
-                except Exception as e:
-                    raise UserError(_("No se pudo crear el Directorio: %s ."+path, e))
+                    directory = record.storage_id.name
+                    storage_dir = record.storage_id.path
+                    path = os.path.join(storage_dir, directory)
+                    dir = record.complete_name
+                    path = os.path.join(path,dir)
+                    try:
+                        os.makedirs(path)
+                        _logger.error("Creando Directorio")
+                    except Exception as e:
+                        raise UserError(_("No se pudo crear el Directorio: %s ."+path, e))
         return res
 
     def write(self, vals):
