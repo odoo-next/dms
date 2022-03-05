@@ -9,14 +9,13 @@
     "category": "Usability",
     "summary": "Allows to drag files into Odoo",
     "depends": ["web"],
-   # "data": ["views/templates.xml"],
+    "data": [],
     "assets": {
         "web.assets_backend": [
-            "web_drop_target/static/libs/base64js.min.js",
+            "web_drop_target/static/lib/base64js.min.js",
             "web_drop_target/static/src/js/web_drop_target.js",
             "web_drop_target/static/src/scss/web_drop_target.scss",
         ],
         "web.assets_qweb": ["web_drop_target/static/src/xml/widgets.xml"],
     },
-
 }
