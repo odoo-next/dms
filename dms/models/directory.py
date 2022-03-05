@@ -102,9 +102,10 @@ class DmsDirectory(models.Model):
         readonly=True,
         store=True,
         compute_sudo=True,
+        recursive=True,
     )
     complete_name = fields.Char(
-        "Complete Name", compute="_compute_complete_name", store=True
+        compute="_compute_complete_name", store=True, recursive=True
     )
     child_directory_ids = fields.One2many(
         comodel_name="dms.directory",
@@ -227,9 +228,10 @@ class DmsDirectory(models.Model):
         return result
 
     def _compute_access_url(self):
-        super()._compute_access_url()
+        res = super()._compute_access_url()
         for item in self:
             item.access_url = "/my/dms/directory/%s" % (item.id)
+        return res
 
     def check_access_token(self, access_token=False):
         res = False
@@ -307,8 +309,8 @@ class DmsDirectory(models.Model):
             if not record.res_model:
                 record.model_id = False
                 continue
-            record.model_id = self.env["ir.model"].search(
-                [("model", "=", record.res_model)]
+            record.model_id = (
+                self.env["ir.model"].sudo().search([("model", "=", record.res_model)])
             )
 
     def _inverse_model_id(self):
@@ -589,7 +591,7 @@ class DmsDirectory(models.Model):
 
     def _alias_get_creation_values(self):
         values = super()._alias_get_creation_values()
-        values["alias_model_id"] = self.env["ir.model"]._get("dms.directory").id
+        values["alias_model_id"] = self.env["ir.model"].sudo()._get("dms.directory").id
         if self.id:
             values["alias_defaults"] = defaults = ast.literal_eval(
                 self.alias_defaults or "{}"
@@ -642,7 +644,6 @@ class DmsDirectory(models.Model):
                 parent = self.browse([vals["parent_id"]])
                 data = next(iter(parent.sudo().read(["storage_id"])), {})
                 vals["storage_id"] = self._convert_to_write(data).get("storage_id")
-
         # Hack to prevent error related to mail_message parent not exists in some cases
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})

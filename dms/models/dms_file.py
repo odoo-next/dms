@@ -276,10 +276,18 @@ class File(models.Model):
         index = 1
         for dms_file in self:
             if logging:
-                info = (index, record_count, dms_file.migration)
-                _logger.info(_("Migrate File %s of %s [ %s ]") % info)
+                _logger.info(
+                    _(
+                        "Migrate File %(index)s of %(record_count)s [ %(dms_file_migration)s ]"
+                    )
+                    % {
+                        "index": index,
+                        "record_count": record_count,
+                        "dms_file_migration": dms_file.migration,
+                    }
+                )
                 index += 1
-            dms_file.write({"content": dms_file.with_context({}).content})
+            dms_file.write({"content": dms_file.with_context(**{}).content})
 
     def action_save_onboarding_file_step(self):
         self.env.user.company_id.set_onboarding_step_done(
@@ -420,7 +428,7 @@ class File(models.Model):
         for record in self:
             if record.content_file:
                 context = {"human_size": True} if bin_size else {"base64": True}
-                record.content = record.with_context(context).content_file
+                record.content = record.with_context(**context).content_file
             elif record.content_binary:
                 record.content = (
                     record.content_binary
@@ -429,7 +437,7 @@ class File(models.Model):
                 )
             elif record.attachment_id:
                 context = {"human_size": True} if bin_size else {"base64": True}
-                record.content = record.with_context(context).attachment_id.datas
+                record.content = record.with_context(**context).attachment_id.datas
 
     @api.depends("content_binary", "content_file")
     def _compute_save_type(self):
