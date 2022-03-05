@@ -21,7 +21,7 @@ class SlideInherit(models.Model):
     _inherit = 'slide.slide'
 
     various_doc_formats = fields.Boolean(
-        string='Various Doc Formats',
+        string='Office Doc Formats',
         required=False, default=False)
 
     datas = fields.Binary('Content', attachment=True)

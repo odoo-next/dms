@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "eLearning Various Doc Format",
+    'name': "eLearning Office Doc Formats",
 
-    'summary': """eLearning Various Doc Format""",
+    'summary': """eLearning Office Doc Formats""",
 
     'description': """
        eLearning Various Doc Format

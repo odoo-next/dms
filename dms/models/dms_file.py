@@ -158,7 +158,7 @@ class File(models.Model):
                                 </head>
                                 <body>"""
             embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            access_url, 1000, 900)+"</body> </html>"
+            access_url, 1000, 1100)+"</body> </html>"
             _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
             record.embed_code=embed_code
             record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
