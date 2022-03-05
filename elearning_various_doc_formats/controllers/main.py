@@ -33,6 +33,6 @@ class ContentController(http.Controller):
         content_type = ["Content-Type", "application/octet-stream"]
         disposition_content = [
             "Content-Disposition",
-            content_disposition(dms_file_sudo.file_name),
+            content_disposition(name),
         ]
         return request.make_response(filecontent, [content_type, disposition_content])
