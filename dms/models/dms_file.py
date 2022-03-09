@@ -161,7 +161,10 @@ class File(models.Model):
             access_url, 1000, 1100)+"</body> </html>"
             _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
             record.embed_code=embed_code
-            record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
+            if record.directory_id:
+                record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
+            else:
+                record.path_file_disk=''
 
 
 
