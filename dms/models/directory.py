@@ -317,13 +317,21 @@ class DmsDirectory(models.Model):
         for record in self:
             record.res_model = record.model_id.model
 
+    # def name_get(self):
+    #     if not self.env.context.get("directory_short_name", False):
+    #         return super().name_get()
+    #     vals = []
+    #     for record in self:
+    #         vals.append(tuple([record.id, record.name]))
+    #     return vals
+    
     def name_get(self):
-        if not self.env.context.get("directory_short_name", False):
-            return super().name_get()
-        vals = []
-        for record in self:
-            vals.append(tuple([record.id, record.name]))
-        return vals
+        if self._context.get('directory_short_name', False):
+            res = []
+            for record in self:
+                res.append((record.id, record.name))
+            return res
+        return super(DmsDirectory, self).name_get()
 
     def toggle_starred(self):
         updates = defaultdict(set)
@@ -343,6 +351,26 @@ class DmsDirectory(models.Model):
         self.env.user.company_id.set_onboarding_step_done(
             "documents_onboarding_directory_state"
         )
+
+    def action_dms_subdirectories(self):
+        self.ensure_one()
+        ctx = self._context.copy()
+        ctx.update({'default_parent_id': self.id, 'searchpanel_default_parent_id': self.id})
+        action = {
+                # 'name': _('Cash Control'),
+                'name': self.name,
+                'view_mode': 'kanban,tree,form',
+                'res_model': 'dms.directory',
+                'type': 'ir.actions.act_window',
+                'domain': [
+                    # ("parent_id", "child_of", self.id), # We don't care all children, only direct ones
+                    # ("parent_id", "=", self.id), # We set this by searchpanel context
+                    ("is_hidden", "=", False),
+                    ("id", "!=", self.id),
+                ],
+                'context': ctx,
+                'target': 'current'}
+        return action
 
     # ----------------------------------------------------------
     # SearchPanel
