@@ -355,7 +355,10 @@ class DmsDirectory(models.Model):
     def action_dms_subdirectories(self):
         self.ensure_one()
         ctx = self._context.copy()
-        ctx.update({'default_parent_id': self.id, 'searchpanel_default_parent_id': self.id})
+        ctx.update({
+            'default_parent_id': self.id,
+            'searchpanel_default_parent_id': self.id
+            })
         action = {
                 # 'name': _('Cash Control'),
                 'name': self.name,
@@ -364,7 +367,7 @@ class DmsDirectory(models.Model):
                 'type': 'ir.actions.act_window',
                 'domain': [
                     # ("parent_id", "child_of", self.id), # We don't care all children, only direct ones
-                    # ("parent_id", "=", self.id), # We set this by searchpanel context
+                    ("parent_id", "=", self.id), # We set this by searchpanel context
                     ("is_hidden", "=", False),
                     ("id", "!=", self.id),
                 ],

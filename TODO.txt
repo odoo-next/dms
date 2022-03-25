@@ -1,0 +1,4 @@
+UX: 
+Crear por defecto un grupo admin con todos los permisos.
+Agregar al usuario admin al grupo por defecto.
+Al crear una carpeta, hacerlo por defecto con el grupo más elevado al que esté asociado el user.
