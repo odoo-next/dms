@@ -312,8 +312,6 @@ class DmsDirectory(models.Model):
             record.res_model = record.model_id.model
 
     def name_get(self):
-        if not self.env.context.get("directory_short_name", False):
-            return super().name_get()
         vals = []
         for record in self:
             vals.append(tuple([record.id, record.name]))
