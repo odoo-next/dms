@@ -85,6 +85,8 @@ class ResCompany(models.Model):
     def action_open_documents_onboarding_directory(self):
         storage = self.env["dms.storage"].search([], order="create_date desc", limit=1)
         action = self.env.ref("dms.action_dms_directory_new").read()[0]
+        _logger.error("-----------------------------------")
+        _logger.error( **self.env.context)
         action["context"] = {
             **self.env.context,
             **{
