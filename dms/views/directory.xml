@@ -90,7 +90,7 @@
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
             [
-            ("directory_id", "child_of", active_id),
+            ('parent_id','=',active_id),
             ("is_hidden", "=", False),
             ]
         </field>
