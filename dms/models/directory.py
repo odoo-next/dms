@@ -62,21 +62,15 @@ class DmsDirectory(models.Model):
         auto_join=True,
         store=True,
     )
-    parent_id = fields.Many2one(
-        comodel_name="dms.directory",
-        string="Parent Directory",
-        domain="[('permission_create', '=', True)]",
-        ondelete="restrict",
-        # Access to a directory doesn't necessarily mean access its parent, so
-        # prefetching this field could lead to misleading access errors
-        prefetch=False,
-        index=True,
-        store=True,
-        readonly=False,
-        compute="_compute_parent_id",
-        copy=True,
-        default=lambda self: self._default_parent_id(),
-    )
+
+
+    parent_id = fields.Many2one( comodel_name="dms.directory",string="Parent Directory",  domain="[('permission_create', '=', True)]",
+                                ondelete="restrict", index=True,   copy=True, prefetch=False,default=lambda self: self._default_parent_id(),)
+    parent_name = fields.Char(related='parent_id.name', readonly=True, string='Parent name')
+    child_ids = fields.One2many('dms.directory', 'parent_id', string='Directory', domain=[('active', '=', True)])
+
+
+
 
     def _default_parent_id(self):
         context = self.env.context
@@ -102,9 +96,10 @@ class DmsDirectory(models.Model):
         readonly=True,
         store=True,
         compute_sudo=True,
+        recursive=True,
     )
     complete_name = fields.Char(
-        "Complete Name", compute="_compute_complete_name", store=True
+        compute="_compute_complete_name", store=True, recursive=True
     )
     child_directory_ids = fields.One2many(
         comodel_name="dms.directory",
@@ -227,9 +222,10 @@ class DmsDirectory(models.Model):
         return result
 
     def _compute_access_url(self):
-        super()._compute_access_url()
+        res = super()._compute_access_url()
         for item in self:
             item.access_url = "/my/dms/directory/%s" % (item.id)
+        return res
 
     def check_access_token(self, access_token=False):
         res = False
@@ -307,8 +303,8 @@ class DmsDirectory(models.Model):
             if not record.res_model:
                 record.model_id = False
                 continue
-            record.model_id = self.env["ir.model"].search(
-                [("model", "=", record.res_model)]
+            record.model_id = (
+                self.env["ir.model"].sudo().search([("model", "=", record.res_model)])
             )
 
     def _inverse_model_id(self):
@@ -461,18 +457,6 @@ class DmsDirectory(models.Model):
                 groups |= one.parent_id.complete_group_ids
             self.complete_group_ids = groups
 
-    # ----------------------------------------------------------
-    # View
-    # ----------------------------------------------------------
-
-    @api.depends("is_root_directory")
-    def _compute_parent_id(self):
-        for record in self:
-            if record.is_root_directory:
-                record.parent_id = None
-            else:
-                # HACK: Not needed in v14 due to odoo/odoo#64359
-                record.parent_id = record.parent_id
 
     @api.depends("category_id")
     def _compute_tags(self):
@@ -589,7 +573,7 @@ class DmsDirectory(models.Model):
 
     def _alias_get_creation_values(self):
         values = super()._alias_get_creation_values()
-        values["alias_model_id"] = self.env["ir.model"]._get("dms.directory").id
+        values["alias_model_id"] = self.env["ir.model"].sudo()._get("dms.directory").id
         if self.id:
             values["alias_defaults"] = defaults = ast.literal_eval(
                 self.alias_defaults or "{}"
@@ -642,7 +626,6 @@ class DmsDirectory(models.Model):
                 parent = self.browse([vals["parent_id"]])
                 data = next(iter(parent.sudo().read(["storage_id"])), {})
                 vals["storage_id"] = self._convert_to_write(data).get("storage_id")
-
         # Hack to prevent error related to mail_message parent not exists in some cases
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})
