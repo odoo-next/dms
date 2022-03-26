@@ -537,7 +537,7 @@
                                 <group>
                                     <field name="write_date" readonly="1" />
                                     <field name="write_uid" readonly="1" />
-                                    <field name="child_ids"  />
+
 
                                 </group>
                             </group>

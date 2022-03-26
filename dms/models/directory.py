@@ -67,7 +67,7 @@ class DmsDirectory(models.Model):
     parent_id = fields.Many2one( comodel_name="dms.directory",string="Parent Directory",  domain="[('permission_create', '=', True)]",
                                 ondelete="restrict", index=True,   copy=True, prefetch=False,default=lambda self: self._default_parent_id(),)
     parent_name = fields.Char(related='parent_id.name', readonly=True, string='Parent name')
-    child_ids = fields.One2many('dms.directory', 'parent_id', string='Directory')
+
 
 
 
