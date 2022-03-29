@@ -375,8 +375,9 @@ class File(models.Model):
     def _compute_path(self):
         model = self.env["dms.directory"]
         for record in self:
+
+            path_names = [record.display_name]
             if path_names:
-                path_names = [record.display_name]
                 path_json = [
                     {
                         "model": record._name,
