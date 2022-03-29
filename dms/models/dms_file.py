@@ -16,12 +16,12 @@ from odoo.tools import consteq, human_size
 from odoo.tools.mimetypes import guess_mimetype
 
 from ..tools import file
-import  os
+import os
+
 _logger = logging.getLogger(__name__)
 
 
 class File(models.Model):
-
     _name = "dms.file"
     _description = "File"
 
@@ -55,7 +55,7 @@ class File(models.Model):
         auto_join=True,
         required=True,
         index=True,
-       ondelete="cascade" )
+        ondelete="cascade")
 
     # Override acording to defined in AbstractDmsMixin
     storage_id = fields.Many2one(
@@ -141,17 +141,16 @@ class File(models.Model):
     # Extend inherited field(s)
     image_1920 = fields.Image(compute="_compute_image_1920", store=True, readonly=False)
 
+    embed_code = fields.Text(string="Embed Code", compute='_compute_file_data')
+    path_file_disk = fields.Char(string="Full Path Disk", compute='_compute_file_data')
 
-    embed_code = fields.Text(string="Embed Code", compute='_compute_file_data' )
-    path_file_disk = fields.Char(string="Full Path Disk", compute='_compute_file_data' )
-
-    @api.depends('tag_ids','directory_id')
+    @api.depends('tag_ids', 'directory_id')
     def _compute_file_data(self):
         for record in self:
             if record.directory_id and record.name:
                 base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-                access_url = base_url +"/my/dms/file/download/%s" % (record.name)
-                _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
+                access_url = base_url + "/my/dms/file/download/%s" % (record.name)
+                _logger.error('+++++++++++++++++++++++++++++++++: %s', access_url)
                 html = """
                                 <!DOCTYPE html>
                                 <html>
@@ -159,17 +158,15 @@ class File(models.Model):
                                         <title>HTML Tables</title>
                                     </head>
                                     <body>"""
-                embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-                access_url, 1000, 900)+"</body> </html>"
+                embed_code = html + '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
+                    access_url, 1000, 900) + "</body> </html>"
                 _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
-                record.embed_code=embed_code
-                record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
+                record.embed_code = embed_code
+                record.path_file_disk = os.path.join(
+                    os.path.join(record.directory_id.storage_id.name, record.directory_id.complete_name), record.name)
             else:
-                record.embed_code=""
-                record.path_file_disk=""
-
-
-
+                record.embed_code = ""
+                record.path_file_disk = ""
 
     @api.depends("mimetype", "content")
     def _compute_image_1920(self):
@@ -195,8 +192,8 @@ class File(models.Model):
             else:
                 items = (
                     self.env["dms.directory"]
-                    .sudo()
-                    .search([("access_token", "=", access_token)])
+                        .sudo()
+                        .search([("access_token", "=", access_token)])
                 )
                 if items:
                     item = items[0]
@@ -260,8 +257,8 @@ class File(models.Model):
     def _get_binary_max_size(self):
         return int(
             self.env["ir.config_parameter"]
-            .sudo()
-            .get_param("dms.binary_max_size", default=25)
+                .sudo()
+                .get_param("dms.binary_max_size", default=25)
         )
 
     @api.model
@@ -322,8 +319,8 @@ class File(models.Model):
             domain = [("parent_id", operator, directory_id)]
             values = (
                 self.env["dms.directory"]
-                .with_context(directory_short_name=True)
-                .search_read(domain, ["display_name", "parent_id"])
+                    .with_context(directory_short_name=True)
+                    .search_read(domain, ["display_name", "parent_id"])
             )
             return {
                 "parent_field": "parent_id",
@@ -382,32 +379,31 @@ class File(models.Model):
         for record in self:
 
             path_names = [record.display_name]
-            if record.directory_id:
-                path_json = [
+            path_json = [
+                {
+                    "model": record._name,
+                    "name": record.display_name,
+                    "id": isinstance(record.id, int) and record.id or 0,
+                }
+            ]
+            current_dir = record.directory_id
+            while current_dir:
+                path_names.insert(0, current_dir.name)
+                path_json.insert(
+                    0,
                     {
-                        "model": record._name,
-                        "name": record.display_name,
-                        "id": isinstance(record.id, int) and record.id or 0,
-                    }
-                ]
-                current_dir = record.directory_id
-                while current_dir:
-                    path_names.insert(0, current_dir.name)
-                    path_json.insert(
-                        0,
-                        {
-                            "model": model._name,
-                            "name": current_dir.name,
-                            "id": current_dir.id,
-                        },
-                    )
-                    current_dir = current_dir.parent_id
-                record.update(
-                    {
-                        "path_names": "/".join(str(path_names)),
-                        "path_json": "",
-                    }
+                        "model": model._name,
+                        "name": current_dir.name,
+                        "id": current_dir.id,
+                    },
                 )
+                current_dir = current_dir.parent_id
+            record.update(
+                {
+                    "path_names": "/".join(str(path_names)),
+                    "path_json": "",
+                }
+            )
 
     @api.depends("name", "mimetype", "content")
     def _compute_extension(self):
@@ -482,7 +478,7 @@ class File(models.Model):
     def _check_storage_id_attachment_res_model(self):
         for record in self:
             if record.storage_id.save_type == "attachment" and not (
-                record.res_model and record.res_id
+                    record.res_model and record.res_id
             ):
                 raise ValidationError(
                     _("A file must have model and resource ID in attachment storage.")
@@ -495,9 +491,9 @@ class File(models.Model):
                 raise ValidationError(_("The file name is invalid."))
             files = record.sudo().directory_id.file_ids.name_get()
             if list(
-                filter(
-                    lambda file: file[1] == record.name and file[0] != record.id, files
-                )
+                    filter(
+                        lambda file: file[1] == record.name and file[0] != record.id, files
+                    )
             ):
                 raise ValidationError(_("A file with the same name already exists."))
 
@@ -505,8 +501,8 @@ class File(models.Model):
     def _check_extension(self):
         for record in self:
             if (
-                record.extension
-                and record.extension in self._get_forbidden_extensions()
+                    record.extension
+                    and record.extension in self._get_forbidden_extensions()
             ):
                 raise ValidationError(_("The file has a forbidden file extension."))
 
@@ -546,8 +542,8 @@ class File(models.Model):
         if directory.res_model and directory.res_id:
             attachment = (
                 self.env["ir.attachment"]
-                .with_context(dms_file=True)
-                .create(
+                    .with_context(dms_file=True)
+                    .create(
                     {
                         "name": vals["name"],
                         "datas": vals["content"],
