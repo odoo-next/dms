@@ -146,6 +146,12 @@ class DmsDirectory(models.Model):
         auto_join=False,
         copy=False,
     )
+    file_id = fields.Many2one('dms.file', 'File', compute='_compute_file_id')
+
+    @api.depends('file_ids')
+    def _compute_file_id(self):
+        for p in self:
+            p.file_id = p.file_ids[:1].id
 
     count_directories = fields.Integer(
         compute="_compute_count_directories", string="Count Subdirectories Title"

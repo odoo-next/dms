@@ -10,7 +10,7 @@ odoo.define("dms.DragDrop", function (require) {
     const _t = core._t;
 
     return _.extend({}, DropTargetMixin.DropTargetMixin, {
-        /**
+        /**88
          * @override
          */
         init: function () {

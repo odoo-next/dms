@@ -33,6 +33,7 @@ class File(models.Model):
         "mail.activity.mixin",
         "abstract.dms.mixin",
     ]
+    _inherits = {'dms.directory': 'directory_id'}
 
     _order = "name asc"
 
@@ -51,11 +52,11 @@ class File(models.Model):
         string="Directory",
         domain="[('permission_create', '=', True)]",
         context="{'dms_directory_show_path': True}",
-        ondelete="restrict",
         auto_join=True,
         required=True,
         index=True,
-    )
+       ondelete="cascade" )
+
     # Override acording to defined in AbstractDmsMixin
     storage_id = fields.Many2one(
         related="directory_id.storage_id",
