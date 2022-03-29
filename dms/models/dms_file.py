@@ -145,24 +145,29 @@ class File(models.Model):
     embed_code = fields.Text(string="Embed Code", compute='_compute_file_data' )
     path_file_disk = fields.Char(string="Full Path Disk", compute='_compute_file_data' )
 
-    @api.depends('tag_ids')
+    @api.depends('tag_ids','directory_id')
     def _compute_file_data(self):
         for record in self:
-            base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-            access_url = base_url +"/my/dms/file/download/%s" % (record.name)
-            _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
-            html = """
-                            <!DOCTYPE html>
-                            <html>
-                                <head>
-                                    <title>HTML Tables</title>
-                                </head>
-                                <body>"""
-            embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
-            access_url, 1000, 900)+"</body> </html>"
-            _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
-            record.embed_code=embed_code
-            record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
+            if record.directory_id:
+                base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+                access_url = base_url +"/my/dms/file/download/%s" % (record.name)
+                _logger.error('+++++++++++++++++++++++++++++++++: %s',access_url)
+                html = """
+                                <!DOCTYPE html>
+                                <html>
+                                    <head>
+                                        <title>HTML Tables</title>
+                                    </head>
+                                    <body>"""
+                embed_code =html+ '<iframe src="https://view.officeapps.live.com/op/embed.aspx?src=%s" allowFullScreen="true" height="%s" width="%s" frameborder="0"></iframe>' % (
+                access_url, 1000, 900)+"</body> </html>"
+                _logger.error('+++++++++++++++++++----------------++++++++++++++: %s', embed_code)
+                record.embed_code=embed_code
+                record.path_file_disk=os.path.join(os.path.join(record.directory_id.storage_id.name,record.directory_id.complete_name),record.name)
+            else:
+                record.embed_code=""
+                record.path_file_disk=""
+
 
 
 
@@ -377,7 +382,7 @@ class File(models.Model):
         for record in self:
 
             path_names = [record.display_name]
-            if path_names:
+            if record.directory_id:
                 path_json = [
                     {
                         "model": record._name,
@@ -400,7 +405,7 @@ class File(models.Model):
                 record.update(
                     {
                         "path_names": "/".join(path_names),
-                        "path_json":"",
+                        "path_json": json.dumps(path_json),
                     }
                 )
 
