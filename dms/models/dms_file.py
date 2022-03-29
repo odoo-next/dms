@@ -404,7 +404,7 @@ class File(models.Model):
                     current_dir = current_dir.parent_id
                 record.update(
                     {
-                        "path_names": "/".join(path_names),
+                        "path_names": "/".join(str(path_names)),
                         "path_json": "",
                     }
                 )
