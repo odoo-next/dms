@@ -375,32 +375,33 @@ class File(models.Model):
     def _compute_path(self):
         model = self.env["dms.directory"]
         for record in self:
-            path_names = [record.display_name]
-            path_json = [
-                {
-                    "model": record._name,
-                    "name": record.display_name,
-                    "id": isinstance(record.id, int) and record.id or 0,
-                }
-            ]
-            current_dir = record.directory_id
-            while current_dir:
-                path_names.insert(0, current_dir.name)
-                path_json.insert(
-                    0,
+            if path_names:
+                path_names = [record.display_name]
+                path_json = [
                     {
-                        "model": model._name,
-                        "name": current_dir.name,
-                        "id": current_dir.id,
-                    },
+                        "model": record._name,
+                        "name": record.display_name,
+                        "id": isinstance(record.id, int) and record.id or 0,
+                    }
+                ]
+                current_dir = record.directory_id
+                while current_dir:
+                    path_names.insert(0, current_dir.name)
+                    path_json.insert(
+                        0,
+                        {
+                            "model": model._name,
+                            "name": current_dir.name,
+                            "id": current_dir.id,
+                        },
+                    )
+                    current_dir = current_dir.parent_id
+                record.update(
+                    {
+                        "path_names": "/".join(path_names),
+                        "path_json": json.dumps(path_json),
+                    }
                 )
-                current_dir = current_dir.parent_id
-            record.update(
-                {
-                    "path_names": "/".join(path_names),
-                    "path_json": json.dumps(path_json),
-                }
-            )
 
     @api.depends("name", "mimetype", "content")
     def _compute_extension(self):
