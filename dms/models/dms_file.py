@@ -405,7 +405,7 @@ class File(models.Model):
                 record.update(
                     {
                         "path_names": "/".join(path_names),
-                        "path_json": json.dumps(path_json),
+                        "path_json": "",
                     }
                 )
 
