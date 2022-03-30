@@ -635,8 +635,8 @@ class DmsDirectory(models.Model):
         ctx.update({"default_parent_id": False})
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
         vals = {
-            "directory_id": self.id,
-            "name": self.name,
+            "directory_id": res.id,
+            "name": res.name,
             "is_dir_link": True,
         }
         self.env["dms.file"].sudo().create(vals)
