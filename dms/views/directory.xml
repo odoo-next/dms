@@ -92,6 +92,7 @@
             [
             ('parent_id','=',active_id),
             ("is_hidden", "=", False),
+            ("is_dir_link","=",False)
             ]
         </field>
         <field name="context">
