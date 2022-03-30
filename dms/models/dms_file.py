@@ -96,7 +96,6 @@ class File(models.Model):
         string="Content",
         attachment=False,
         prefetch=False,
-        required=True,
         store=False,
     )
 
@@ -143,6 +142,7 @@ class File(models.Model):
 
     embed_code = fields.Text(string="Embed Code", compute='_compute_file_data')
     path_file_disk = fields.Char(string="Full Path Disk", compute='_compute_file_data')
+    is_dir_link = fields.Boolean(string="Link", default=False )
 
     @api.depends('tag_ids', 'directory_id')
     def _compute_file_data(self):

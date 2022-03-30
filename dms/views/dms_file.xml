@@ -387,6 +387,7 @@
                                 filename="name"
                                 mimetype="mimetype"
                                 widget="preview_binary"
+                                required="True"
                             />
                         </group>
                         <group>
@@ -434,6 +435,7 @@
                             name="record_ref"
                             attrs="{'invisible': [('storage_id_save_type', '!=', 'attachment')]}"
                         />
+                        <field name="is_dir_link"/>
                     </group>
                     <notebook>
                         <page name="page_meta" string="Meta Information">

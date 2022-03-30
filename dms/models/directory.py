@@ -634,6 +634,13 @@ class DmsDirectory(models.Model):
         ctx = dict(self.env.context).copy()
         ctx.update({"default_parent_id": False})
         res = super(DmsDirectory, self.with_context(ctx)).create(vals_list)
+        vals = {
+            "directory_id": self.id,
+            "name": self.name,
+            "is_dir_link": True,
+        }
+        self.env["dms.file"].sudo().create(vals)
+
         _logger.error("%s", str(res))
         for record in res:
             if record.storage_id:
