@@ -274,7 +274,7 @@ class File(models.Model):
         elif self.is_dir_link:
             icon="folder.svg"
 
-        return  icon
+        return icon
 
     # ----------------------------------------------------------
     # Actions
