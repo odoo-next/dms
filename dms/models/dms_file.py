@@ -268,7 +268,13 @@ class File(models.Model):
         return [extension.strip() for extension in extensions.split(",")]
 
     def _get_icon_placeholder_name(self):
-        return self.extension and "file_%s.svg" % self.extension or ""
+        icon=""
+        if self.extension:
+            icon="file_%s.svg" % self.extension
+        elif self.is_dir_link:
+            icon="folder.svg"
+
+        return  icon
 
     # ----------------------------------------------------------
     # Actions
