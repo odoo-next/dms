@@ -62,21 +62,9 @@ class DmsDirectory(models.Model):
         auto_join=True,
         store=True,
     )
-    parent_id = fields.Many2one(
-        comodel_name="dms.directory",
-        string="Parent Directory",
-        domain="[('permission_create', '=', True)]",
-        ondelete="restrict",
-        # Access to a directory doesn't necessarily mean access its parent, so
-        # prefetching this field could lead to misleading access errors
-        prefetch=False,
-        index=True,
-        store=True,
-        readonly=False,
-        compute="_compute_parent_id",
-        copy=True,
-        default=lambda self: self._default_parent_id(),
-    )
+    parent_id = fields.Many2one( comodel_name="dms.directory",string="Parent Directory",  domain="[('permission_create', '=', True)]",
+                                 ondelete="restrict", index=True,   copy=True, prefetch=False,default=lambda self: self._default_parent_id(),)
+    parent_name = fields.Char(related='parent_id.name', readonly=True, string='Parent name')
 
     def _default_parent_id(self):
         context = self.env.context
@@ -104,8 +92,8 @@ class DmsDirectory(models.Model):
         compute_sudo=True,
         recursive=True,
     )
-    complete_name = fields.Char(
-        compute="_compute_complete_name", store=True, recursive=True
+    complete_name = fields.Char( "Complete Name",
+                                 compute="_compute_complete_name", store=True, recursive=True
     )
     child_directory_ids = fields.One2many(
         comodel_name="dms.directory",
@@ -324,14 +312,12 @@ class DmsDirectory(models.Model):
     #     for record in self:
     #         vals.append(tuple([record.id, record.name]))
     #     return vals
-    
+
     def name_get(self):
-        if self._context.get('directory_short_name', False):
-            res = []
-            for record in self:
-                res.append((record.id, record.name))
-            return res
-        return super(DmsDirectory, self).name_get()
+        vals = []
+        for record in self:
+            vals.append(tuple([record.id, record.name]))
+        return vals
 
     def toggle_starred(self):
         updates = defaultdict(set)
@@ -494,15 +480,6 @@ class DmsDirectory(models.Model):
     # ----------------------------------------------------------
     # View
     # ----------------------------------------------------------
-
-    @api.depends("is_root_directory")
-    def _compute_parent_id(self):
-        for record in self:
-            if record.is_root_directory:
-                record.parent_id = None
-            else:
-                # HACK: Not needed in v14 due to odoo/odoo#64359
-                record.parent_id = record.parent_id
 
     @api.depends("category_id")
     def _compute_tags(self):

@@ -40,6 +40,7 @@
         <field name="domain">
             [
             ("is_hidden", "=", False),
+            ('parent_id','=',active_id)
             ]
         </field>
         <field name="context">
@@ -63,8 +64,7 @@
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">
             [
-            <!-- ("parent_id", "child_of", active_id), -->
-            ("parent_id", "=", active_id),
+            ('parent_id','=',active_id),
             ("is_hidden", "=", False),
             ("id", "!=", active_id),
             ]
@@ -90,8 +90,9 @@
         <field name="view_mode">kanban,tree,graph,pivot,form</field>
         <field name="domain">
             [
-            ("directory_id", "child_of", active_id),
+            ('parent_id','=',active_id),
             ("is_hidden", "=", False),
+            ("is_dir_link","=",False)
             ]
         </field>
         <field name="context">
