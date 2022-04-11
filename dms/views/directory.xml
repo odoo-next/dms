@@ -40,7 +40,7 @@
         <field name="domain">
             [
             ("is_hidden", "=", False),
-            ('parent_id','=',active_id)
+            
             ]
         </field>
         <field name="context">
