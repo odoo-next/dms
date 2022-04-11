@@ -350,7 +350,7 @@ class DmsDirectory(models.Model):
                 'type': 'ir.actions.act_window',
                 'domain': [
                     # ("parent_id", "child_of", self.id), # We don't care all children, only direct ones
-                    # ("parent_id", "=", self.id), # We set this by searchpanel context
+                    ("parent_id", "=", self.id if self.id), # We set this by searchpanel context
                     ("is_hidden", "=", False),
                     ("id", "!=", self.id),
                 ],
